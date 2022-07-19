@@ -11,6 +11,14 @@ def when_verifica_dados(context):
     
     assert True    
 
-@then("verifica-se se é um residente do condomínio")
+@then("um residente é reconhecido")
 def then_retorna_dados(context):
-    pass
+    e_residente, context.lista_pessoas_condominio = verifica_residente(context.pessoa_dados, context.lista_pessoas_condominio)
+    
+    assert e_residente is True
+    
+@then("um residente não é reconhecido")
+def then_retorna_dados(context):
+    e_residente, context.lista_pessoas_condominio = verifica_residente(context.pessoa_dados, context.lista_pessoas_condominio)
+    
+    assert e_residente is False

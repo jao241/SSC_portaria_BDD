@@ -63,27 +63,24 @@ def verifica_na_lista(foto_criptografada):
 
 # Será um gerador de evento.
 def realizar_verificacao_entrada(pessoa_reconhecida, configuracao, foto_selecionada_aleatoriamente):
-    pessoa_dados = {} 
-    
     if pessoa_reconhecida:
         for pessoa in configuracao["pessoas"]:
             if pessoa["foto"] == foto_selecionada_aleatoriamente:
-                pessoa_dados = pessoa
-    
-    return pessoa_dados        
+                return pessoa
 
 # Será um gerador de evento.
-def verifica_residente(env):
-    global pessoa_dados
+def verifica_residente(pessoa_dados, lista_pessoas_condominio):
+    e_residente = False
+
+    if pessoa_dados["residente"] == True:
+            print(f"Bem vindo de volta, residente {pessoa_dados['nome']}\n")
+            lista_pessoas_condominio.append(pessoa_dados)
+            e_residente = True
+    else:
+        print("Você não é um residente do condomínio, verificando autorização de entrada!\n")
     
-    while True:
-        if pessoa_dados["residente"] == True:
-                print(f"Bem vindo de volta, residente {pessoa_dados['nome']}\n")
-                lista_pessoas_condominio.append(pessoa_dados)
-        else:
-            print("Você não é um residente do condomínio, verificando autorização de entrada!\n")
-            
-        yield env.timeout(TIMEOUT_INTERVALO)
+    return e_residente, lista_pessoas_condominio
+        
   
 # Será um gerador de evento.
 def verifica_autorizacao(env):
