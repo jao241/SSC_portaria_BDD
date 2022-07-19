@@ -14,9 +14,6 @@ LISTA_FOTOS = [
     "BD/faces/Mateus Solano.jpg"
 ]
 
-TIMEOUT_INTERVALO = 1
-PROBABILIDADE_DE_SAIR = 4
-
 def configuracao_inicial():
     with open(ARQUIVO_CONFIGURACAO, "r") as arquivo_configuracao: configuracao = json.load(arquivo_configuracao)
     foto_selecionada_aleatoriamente = None
@@ -26,12 +23,10 @@ def configuracao_inicial():
     
     return configuracao, foto_selecionada_aleatoriamente, pessoa_reconhecida, pessoa_dados, lista_pessoas_condominio
     
-# Será um gerador de evento.
 def selecionar_pessoa(foto_selecionada):
     foto_selecionada_aleatoriamente = foto_selecionada
     return foto_selecionada_aleatoriamente
 
-# Será um gerador de evento.
 def configurar_reconhecedor_face(foto_visitante):
     foto_selecionada = face_recognition.load_image_file(foto_visitante)
     foto_original_criptografada = face_recognition.face_encodings(foto_selecionada)[0]
@@ -39,7 +34,6 @@ def configurar_reconhecedor_face(foto_visitante):
     return foto_original_criptografada
 
 def reconhecer_face(foto, foto_criptografada):
-
     e_igual = False    
     try:
         foto_selecionada = face_recognition.load_image_file(foto)
@@ -51,7 +45,6 @@ def reconhecer_face(foto, foto_criptografada):
     
     return e_igual
 
-# Será um gerador de evento.
 def verifica_na_lista(foto_criptografada):
     pessoa_reconhecida = False
     
@@ -61,14 +54,12 @@ def verifica_na_lista(foto_criptografada):
             
     return pessoa_reconhecida
 
-# Será um gerador de evento.
 def realizar_verificacao_entrada(pessoa_reconhecida, configuracao, foto_selecionada_aleatoriamente):
     if pessoa_reconhecida:
         for pessoa in configuracao["pessoas"]:
             if pessoa["foto"] == foto_selecionada_aleatoriamente:
                 return pessoa
 
-# Será um gerador de evento.
 def verifica_residente(pessoa_dados, lista_pessoas_condominio):
     e_residente = False
 
@@ -82,29 +73,27 @@ def verifica_residente(pessoa_dados, lista_pessoas_condominio):
     return e_residente, lista_pessoas_condominio
         
   
-# Será um gerador de evento.
-def verifica_autorizacao(env):
-    global pessoa_dados
-    
-    while True:
-        if pessoa_dados["residente"] == False:
-            if pessoa_dados["entrada_autorizada"] == True:
-                    print(f"Visitante {pessoa_dados['nome']} possui autorização, por favor entre!\n")
-                    lista_pessoas_condominio.append(pessoa_dados)
-            else:
-                print(f"Visitante {pessoa_dados['nome']} não possui autorização de entrada!\n")
-        yield env.timeout(TIMEOUT_INTERVALO)
+def verifica_autorizacao(pessoa_dados, lista_pessoas_condominio):
+    tem_autorizacao = False
+    if pessoa_dados["residente"] == False:
+        if pessoa_dados["entrada_autorizada"] == True:
+                print(f"Visitante {pessoa_dados['nome']} possui autorização, por favor entre!\n")
+                lista_pessoas_condominio.append(pessoa_dados)
+                tem_autorizacao = True
+        else:
+            print(f"Visitante {pessoa_dados['nome']} não possui autorização de entrada!\n")
 
-# Será um gerador de evento.    
-def sair_condominio(env):
-    global lista_pessoas_condominio
-    
-    while True:
-        alguem_vai_sair = random.randint(1, 10) <= PROBABILIDADE_DE_SAIR
-        if lista_pessoas_condominio:
-            if alguem_vai_sair:
-                pessoa_a_remover = random.choice(lista_pessoas_condominio)
-                lista_pessoas_condominio.remove(pessoa_a_remover)
-                print(f'{pessoa_a_remover["nome"]} saiu do condomínio.\n')
+    return tem_autorizacao, lista_pessoas_condominio
 
-        yield env.timeout(TIMEOUT_INTERVALO)
+def sair_condominio(lista_pessoas_condominio):
+    pessoa_saiu = False
+    alguem_vai_sair = True
+    if lista_pessoas_condominio:
+        if alguem_vai_sair:
+            pessoa_a_remover = random.choice(lista_pessoas_condominio)
+            lista_pessoas_condominio.remove(pessoa_a_remover)
+            print(f'{pessoa_a_remover["nome"]} saiu do condomínio.\n')
+            pessoa_saiu = True
+
+    return pessoa_saiu
+

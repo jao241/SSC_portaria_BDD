@@ -12,13 +12,13 @@ def when_verifica_dados(context):
     assert True    
 
 @then("um residente é reconhecido")
-def then_retorna_dados(context):
+def then_residente_reconhecido(context):
     e_residente, context.lista_pessoas_condominio = verifica_residente(context.pessoa_dados, context.lista_pessoas_condominio)
     
     assert e_residente is True
     
 @then("um residente não é reconhecido")
-def then_retorna_dados(context):
+def then_residente_nao_reconhecido(context):
     e_residente, context.lista_pessoas_condominio = verifica_residente(context.pessoa_dados, context.lista_pessoas_condominio)
     
     assert e_residente is False
