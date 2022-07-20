@@ -31,14 +31,14 @@
         {
             "id": 4,
             "nome": "Luciano Szafir",
-            "foto": "/home/joaovitor/Documentos/vs_code/pessoal/SSC_portaria_BDD/BD/faces/Luciano Szafir.jpg",
+            "foto": "/home/joao/Documentos/dev-projects/Back-projects/SSC_Portaria_BDD/BD/faces/Luciano Szafir.jpg",
             "entrada_autorizada": false,
             "residente": true
         },
         {
             "id": 5,
             "nome": "Marcos Mion",
-            "foto": "/home/joaovitor/Documentos/vs_code/pessoal/SSC_portaria_BDD/BD/faces/Marcos Mion.jpg",
+            "foto": "/home/joao/Documentos/dev-projects/Back-projects/SSC_Portaria_BDD/BD/faces/Marcos Mion.jpg",
             "entrada_autorizada": true,
             "residente": false
         },
